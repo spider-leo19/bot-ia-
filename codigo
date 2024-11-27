@@ -1,0 +1,42 @@
+import discord
+from discord.ext import commands 
+from model import get_class
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='$', intents=intents)
+@bot.event
+async def on_ready():
+    print(f'We have logged in as (bot.user]')
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hi! I am a bot {bot.user}1')
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he"* count_heh)
+@bot.command()
+async def check(ctx):
+    if ctx.message.attachments:
+        for attachment in ctx.message.attachments:
+            file_name = attachment.filename
+            file_url = attachment.url 
+            await ctx.send(f"Archivo guardado en ./{file_name }")
+            await attachment.save(f"./{file_name}") 
+            try:
+                clase = get_class("keras_model.h5","labels.txt",file_name)
+                if clase[0] == "mario bros":
+                    await ctx.send("Super Mario es una serie de videojuegos de plataformas creados por la empresa desarrolladora Nintendo y protagonizados por su mascota, Mario. Los videojuegos de Super Mario siguen las aventuras del fontanero Mario, por lo general en el ficticio Reino Champiñón.")
+            
+                elif clase[0] == "metroid":
+                    await ctx.send("Metroid es una serie de videojuegos de acción-aventura, cuya idea fue concebida por Makoto Kano y el artista Hiroji Kiyotake a principios de la década de 1980, ​ dirigida originalmente por Gunpei Yokoi y distribuida internacionalmente por Nintendo, una empresa de videojuegos japonesa.")
+            
+                elif clase[0] == "minecraft":
+                    await ctx.send("Minecraft es un videojuego de construcción de tipo «mundo abierto» o en inglés sandbox creado originalmente por el sueco Markus Persson, que creó posteriormente Mojang Studios.​​")
+            
+                elif clase[0] == "zelda":
+                    await ctx.send("The Legend of Zelda es una serie de videojuegos de acción-aventura creada por los diseñadores japoneses Shigeru Miyamoto y Takashi Tezuka, ​ y desarrollada por Nintendo, empresa que también se encarga de su distribución internacional.")
+            
+            except:
+                await ctx.send("Ha ocurrido un error")
+    else:
+        await ctx.send("Olvidaste subir una imagen :(")
+bot.run("TOKEN XD")
